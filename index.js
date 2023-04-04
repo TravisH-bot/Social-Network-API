@@ -1,8 +1,22 @@
-const { connect, connection } = require("mongoose");
+const express = require("express");
+const db = require("./Develop/config/connection");
+const routes = require("./Develop/routes");
 
-connect("mongodb://127.0.0.1:27017/socialNetwork", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+const cwd = process.cwd();
+
+const PORT = 3001;
+const app = express();
+
+const challenge = cwd.includes("Social-Network-API")
+  ? cwd.split("/Social-Network-API/")
+  : cwd;
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(routes);
+
+db.once("open", () => {
+  app.listen(PORT, () => {
+    console.log(`API server for ${challenge} running on port ${PORT}!`);
+  });
 });
-
-module.exports = connection;
