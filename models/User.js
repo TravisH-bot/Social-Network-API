@@ -1,26 +1,34 @@
 const { Schema, model } = require("mongoose");
 
 const validateEmail = function (email) {
-  let re = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-  return re.test(email);
+  let reg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+  return reg.test(email);
 };
 
 //Schema to create user model
-const userSchema = new Schema({
-  username: { type: String, required: true, trim: true },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    validate: [validateEmail, `Please provide a valid email address`],
-    match: [
-      /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
-      `Please provide a valid email address`,
-    ],
+const userSchema = new Schema(
+  {
+    username: { type: String, required: true, trim: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      validate: [validateEmail, `Please provide a valid email address`],
+      match: [
+        /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
+        `Please provide a valid email address`,
+      ],
+    },
+    thoughts: [{ type: Schema.Types.ObjectId, ref: "thought" }],
+    friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
   },
-  thoughts: [{ type: Schema.Types.ObjectId, ref: "thought" }],
-  friends: [{ type: Schema.Types.ObjectId, ref: "user" }],
-});
+  {
+    toJSON: {
+      getters: true,
+    },
+    id: false,
+  }
+);
 
 //Virtual property 'friendCount' that gets the length of the use's friends array field on query
 userSchema.virtual("friendCount").get(function () {

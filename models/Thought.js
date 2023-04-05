@@ -23,12 +23,24 @@ const reactionSchema = new Schema({
 });
 
 //Schema to post new thought
-const thoughtSchema = new Schema({
-  thoughtText: { type: String, required: true, maxlength: 280 },
-  createdAt: { type: Date, default: Date.now, get: (date) => timeSince(date) },
-  username: { type: String, required: true },
-  reactions: [reactionSchema],
-});
+const thoughtSchema = new Schema(
+  {
+    thoughtText: { type: String, required: true, maxlength: 280 },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: (date) => timeSince(date),
+    },
+    username: { type: String, required: true },
+    reactions: [reactionSchema],
+  },
+  {
+    toJSON: {
+      getters: true,
+    },
+    id: false,
+  }
+);
 
 //Virtual property 'reactionCount' that retrieves the length of the thoughts reactions array field on query.
 thoughtSchema.virtual("reactionCount").get(function () {

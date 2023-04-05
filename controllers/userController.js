@@ -33,7 +33,7 @@ module.exports = {
       .then((user) =>
         !user
           ? res.status(404).json({ message: "No user with that ID" })
-          : User.deleteOne({ _id: { $in: user } })
+          : User.deleteOne({ _id: { $in: user.thoughts } })
       )
       .then(() => res.json({ message: "User and thoughts deleted" }))
       .catch((err) => res.status(500).json(err));
