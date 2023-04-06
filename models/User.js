@@ -1,10 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-const validateEmail = function (email) {
-  let reg = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-  return reg.test(email);
-};
-
 //Schema to create user model
 const userSchema = new Schema(
   {
@@ -13,7 +8,6 @@ const userSchema = new Schema(
       type: String,
       required: true,
       unique: true,
-      validate: [validateEmail, `Please provide a valid email address`],
       match: [
         /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/,
         `Please provide a valid email address`,
@@ -24,7 +18,7 @@ const userSchema = new Schema(
   },
   {
     toJSON: {
-      getters: true,
+      virtuals: true,
     },
     id: false,
   }
