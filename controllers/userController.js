@@ -58,7 +58,7 @@ module.exports = {
     console.log(req.body);
     User.findOneAndUpdate(
       { _id: req.params.userId },
-      { $addToSet: { friends: req.body } },
+      { $addToSet: { friends: req.params.friendsId } },
       { runValidators: true, new: true }
     )
       .then((user) =>
@@ -71,8 +71,8 @@ module.exports = {
   //Delete a Friend
   removeFriend(req, res) {
     User.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $pull: { friends: { friendId: req.params.friendId } } },
+      { _id: req.params.userId },
+      { $pull: { friends: { friendsId: req.params.friendsId } } },
       { runValidators: true, new: true }
     )
       .then((user) =>
